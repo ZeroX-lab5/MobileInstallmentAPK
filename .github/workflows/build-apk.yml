@@ -22,12 +22,36 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          yes | sdkmanager --licenses
 
       - name: Install Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+
+      - name: Check project ZIP
+        run: |
+          ls -la
+          test -f MobileInstallment_Android_Project.zip
+
+      - name: Extract Android project
+        run: unzip -o MobileInstallment_Android_Project.zip -d .
+
+      - name: Build APK
+        run: gradle -p mobile_installment_app assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MobileInstallment-debug-APK
+          path: mobile_installment_app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Extract Android project
         run: unzip -q MobileInstallment_Android_Project.zip -d .
