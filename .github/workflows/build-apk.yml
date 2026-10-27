@@ -52,18 +52,4 @@ jobs:
           path: mobile_installment_app/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
-
-      - name: Extract Android project
-        run: unzip -q MobileInstallment_Android_Project.zip -d .
-
-      - name: Build APK
-        run: gradle -p mobile_installment_app assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: MobileInstallment-debug-APK
-          path: mobile_installment_app/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
-          retention-days: 7
           
